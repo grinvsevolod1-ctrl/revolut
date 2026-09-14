@@ -182,7 +182,7 @@
   document.querySelectorAll('[data-card-mode]').forEach(button => button.addEventListener('click', () => {
     const mode = button.dataset.cardMode;
     cardStage.dataset.mode = mode;
-    document.querySelectorAll('[data-card-mode]').forEach(item => { item.classList.toggle('selected', item === button); item.setAttribute('aria-pressed', item === button); });
+    document.querySelectorAll('[data-card-mode]').forEach(item => { item.classList.toggle('selected', item === button); item.setAttribute('aria-pressed', String(item === button)); });
     const virtual = mode === 'virtual';
     $('#cards-title').textContent = virtual ? 'Go virtual' : 'Elevate your spend';
     $('#cards-description').innerHTML = virtual ? 'Your next card is already in your pocket.<br>Make room for a lighter everyday.' : 'Everyday spending. Extraordinary possibilities.<br>Find a card that feels like you.';

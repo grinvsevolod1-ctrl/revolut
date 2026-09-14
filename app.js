@@ -13,10 +13,9 @@ const navigation = document.querySelector('#navigation');
 menu.addEventListener('click', () => menu.setAttribute('aria-expanded', navigation.classList.toggle('open')));
 navigation.addEventListener('click', event => { if(event.target.closest('a,button')) { navigation.classList.remove('open'); menu.setAttribute('aria-expanded', 'false'); } });
 document.querySelectorAll('[data-savings]').forEach(button => button.addEventListener('click', () => {
-  document.querySelectorAll('[data-savings]').forEach(item => { item.classList.toggle('selected', item === button); item.setAttribute('aria-pressed', item === button); });
+  document.querySelectorAll('[data-savings]').forEach(item => { item.classList.toggle('selected', item === button); item.setAttribute('aria-pressed', String(item === button)); });
   const captions = { Adventure: 'Save for your next adventure.', Wedding: 'Save for your special day.', Moving: 'Save for a place to call your own.' };
   document.querySelector('#savings-caption').textContent = captions[button.dataset.savings];
-  document.querySelector('#savings').dataset.scene = button.dataset.savings;
   document.querySelectorAll('[data-landscape]').forEach(image => image.classList.toggle('active', image.dataset.landscape === button.dataset.savings));
   document.querySelectorAll('[data-savings-ui]').forEach(image => image.classList.toggle('active', image.dataset.savingsUi === button.dataset.savings));
 }));
