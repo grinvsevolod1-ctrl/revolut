@@ -1,3 +1,4 @@
+import Image from "next/image"
 import SiteMotion from "@/components/site-motion"
 
 export default function Page() {
@@ -43,19 +44,19 @@ export default function Page() {
             </div>
             <div className="tile-space" aria-hidden="true">
               <div className="satellite satellite-left">
-                <img src="/assets/salary-layer.png" alt="" />
+                <Image src="/assets/salary-layer.png" alt="" fill sizes="280px" />
               </div>
               <div className="satellite satellite-right">
-                <img src="/assets/salary.png" alt="" />
+                <Image src="/assets/salary.png" alt="" fill sizes="280px" />
               </div>
               <div className="account-tile">
                 <div className="tile-face tile-front">
-                  <img className="tile-sky" src="/assets/hero.png" alt="" />
-                  <img className="tile-person" src="/assets/hero-person.png" alt="" />
-                  <img className="tile-overlay" src="/assets/salary-back.png" alt="" />
+                  <Image className="tile-sky" src="/assets/hero.png" alt="" fill sizes="100vw" priority />
+                  <Image className="tile-person" src="/assets/hero-person.png" alt="" fill sizes="100vw" priority />
+                  <Image className="tile-overlay" src="/assets/salary-back.png" alt="" fill sizes="100vw" />
                 </div>
                 <div className="tile-face tile-back">
-                  <img src="/assets/salary.png" alt="" />
+                  <Image src="/assets/salary.png" alt="" fill sizes="100vw" />
                 </div>
               </div>
             </div>
@@ -88,7 +89,7 @@ export default function Page() {
           <div className="awards-window">
             <div className="awards-track">
               <figure>
-                <img src="/assets/award-downloads.png" width="185" height="85" alt="Finance app ranking" loading="lazy" />
+                <Image src="/assets/award-downloads.png" width={185} height={85} alt="Finance app ranking" />
                 <figcaption>
                   #3 most downloaded
                   <br />
@@ -96,7 +97,7 @@ export default function Page() {
                 </figcaption>
               </figure>
               <figure>
-                <img src="/assets/award-trustpilot.png" width="185" height="85" alt="Trustpilot" loading="lazy" />
+                <Image src="/assets/award-trustpilot.png" width={185} height={85} alt="Trustpilot" />
                 <figcaption>
                   4.7 out of 5
                   <br />
@@ -104,7 +105,7 @@ export default function Page() {
                 </figcaption>
               </figure>
               <figure>
-                <img src="/assets/award-digital.png" width="185" height="85" alt="Global Finance 2025 award" loading="lazy" />
+                <Image src="/assets/award-digital.png" width={185} height={85} alt="Global Finance 2025 award" />
                 <figcaption>
                   World’s Best
                   <br />
@@ -112,7 +113,7 @@ export default function Page() {
                 </figcaption>
               </figure>
               <figure>
-                <img src="/assets/award-forbes.png" width="185" height="85" alt="Forbes award" loading="lazy" />
+                <Image src="/assets/award-forbes.png" width={185} height={85} alt="Forbes award" />
                 <figcaption>
                   World’s Best
                   <br />
@@ -120,7 +121,7 @@ export default function Page() {
                 </figcaption>
               </figure>
               <figure>
-                <img src="/assets/award-payments.png" width="185" height="85" alt="Payments award" loading="lazy" />
+                <Image src="/assets/award-payments.png" width={185} height={85} alt="Payments award" />
                 <figcaption>
                   International Payments
                   <br />
@@ -128,7 +129,7 @@ export default function Page() {
                 </figcaption>
               </figure>
               <figure>
-                <img src="/assets/award-service.png" width="185" height="85" alt="Customer satisfaction award" loading="lazy" />
+                <Image src="/assets/award-service.png" width={185} height={85} alt="Customer satisfaction award" />
                 <figcaption>
                   Customer Satisfaction
                   <br />
@@ -136,7 +137,7 @@ export default function Page() {
                 </figcaption>
               </figure>
               <figure>
-                <img src="/assets/award-guardian.png" width="185" height="85" alt="Consumer Guardian 2025 award" loading="lazy" />
+                <Image src="/assets/award-guardian.png" width={185} height={85} alt="Consumer Guardian 2025 award" />
                 <figcaption>
                   Consumer Guardian
                   <br />
@@ -149,9 +150,9 @@ export default function Page() {
 
         <section className="adventure" id="savings">
           <div className="savings-backgrounds" aria-hidden="true">
-            <img className="savings-bg active" data-landscape="Adventure" src="/assets/savings-adventure.png" width="2400" height="1500" alt="" loading="lazy" />
-            <img className="savings-bg" data-landscape="Wedding" src="/assets/savings-wedding.png" width="4320" height="2700" alt="" loading="lazy" />
-            <img className="savings-bg" data-landscape="Moving" src="/assets/savings-moving.png" width="4320" height="2700" alt="" loading="lazy" />
+            <Image className="savings-bg active" data-landscape="Adventure" src="/assets/savings-adventure.png" fill sizes="100vw" alt="" />
+            <Image className="savings-bg" data-landscape="Wedding" src="/assets/savings-wedding.png" fill sizes="100vw" alt="" />
+            <Image className="savings-bg" data-landscape="Moving" src="/assets/savings-moving.png" fill sizes="100vw" alt="" />
           </div>
           <div className="section-copy">
             <h2>Life, meets savings</h2>
@@ -165,9 +166,9 @@ export default function Page() {
             </button>
           </div>
           <div className="savings-ui">
-            <img className="active" data-savings-ui="Adventure" src="/assets/savings.png" width="2000" height="1000" alt="Example adventure savings balance" loading="lazy" />
-            <img data-savings-ui="Wedding" src="/assets/savings-wedding-ui.png" width="2000" height="1000" alt="Example wedding savings balance" loading="lazy" />
-            <img data-savings-ui="Moving" src="/assets/savings-moving-ui.png" width="2000" height="1000" alt="Example moving savings balance" loading="lazy" />
+            <Image className="active" data-savings-ui="Adventure" src="/assets/savings.png" fill sizes="(max-width:760px) 155vw, 900px" alt="Example adventure savings balance" />
+            <Image data-savings-ui="Wedding" src="/assets/savings-wedding-ui.png" fill sizes="(max-width:760px) 155vw, 900px" alt="Example wedding savings balance" />
+            <Image data-savings-ui="Moving" src="/assets/savings-moving-ui.png" fill sizes="(max-width:760px) 155vw, 900px" alt="Example moving savings balance" />
           </div>
           <div className="choices" aria-label="Savings example">
             <button className="selected" aria-pressed="true" data-savings="Adventure">
