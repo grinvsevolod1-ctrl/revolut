@@ -133,10 +133,10 @@ export default function SiteMotion() {
         return
       }
       const travel = Math.max(0, y - d.hero.top)
-      const opening = 1 - Math.pow(1 - clamp(travel / 48), 3)
-      const shrink = phase(travel, 140, 310)
-      const turn = phase(travel, 320, 390)
-      const settle = phase(travel, 340, 480)
+      const opening = 1 - Math.pow(1 - clamp(travel / 150), 3)
+      const shrink = phase(travel, 220, 430)
+      const turn = phase(travel, 440, 540)
+      const settle = phase(travel, 470, 660)
       const h = d.mobile ? Math.min(d.stageHeight * 0.41, 365) : Math.min(d.stageHeight * 0.59, 510)
       const w = (h * 720) / 1016
       const x = d.mobile ? 0 : d.width * 0.205 * settle
@@ -234,8 +234,9 @@ export default function SiteMotion() {
         renderedRotation = manualRotation
       } else {
         // Critically-damped-ish easing: rendered values chase their targets.
-        renderedY += (targetY - renderedY) * 0.14
-        renderedRotation += (manualRotation - renderedRotation) * 0.16
+        // Lower factors = more damping, so abrupt wheel jumps are smoothed out.
+        renderedY += (targetY - renderedY) * 0.075
+        renderedRotation += (manualRotation - renderedRotation) * 0.12
         if (Math.abs(targetY - renderedY) < 0.35) renderedY = targetY
         if (Math.abs(manualRotation - renderedRotation) < 0.02) renderedRotation = manualRotation
       }
