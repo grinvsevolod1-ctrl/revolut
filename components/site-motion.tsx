@@ -76,6 +76,15 @@ export default function SiteMotion() {
     const cardStory = $("#cards"), cardStage = $(".card-stage"), ring = $(".cards-ring")
     const viewport = $(".cards-viewport")
     const awards = $(".awards-track")
+    // Cache every element the per-frame functions touch, so the scroll loop
+    // never runs a querySelector again (was dozens of lookups per frame).
+    const scrollCue = $(".scroll-cue")
+    const walletPhone = $(".wallet-phone"), cardMaterial = $("#card-material")
+    const savingsBg = $(".savings-backgrounds"), airDemo = $(".air-demo"), airOrb = $(".air-orb")
+    const userBubble = $(".user-bubble"), assistantBubble = $(".assistant-bubble")
+    const securityArt = $(".security-art"), orbitOne = $(".orbit-one")
+    const stocks = [...document.querySelectorAll<HTMLElement>(".stock")]
+    const header = $("header")
     const themes: [string, string][] = [
       ["platinum", "Platinum"], ["graphite", "Black Metal"], ["gold", "Gold"],
       ["lavender", "Lavender"], ["sage", "Sage Green"], ["rose", "Rose Gold"], ["blue", "Midnight Blue"],
@@ -119,6 +128,15 @@ export default function SiteMotion() {
       paymentCards.forEach((card: any, index: number) => {
         card.style.transform = `rotateY(${(index * 360) / themes.length}deg) translateZ(${radius}px) rotateZ(-8deg)`
       })
+      // Satellite sizes depend only on the stage height, not on scroll, so set
+      // them once per measure instead of rewriting the same values every frame.
+      const shRef = dimensions.stageHeight
+      const hRef = dimensions.mobile ? Math.min(shRef * 0.41, 365) : Math.min(shRef * 0.59, 510)
+      const wRef = (hRef * 720) / 1016
+      ;[leftTile, rightTile].forEach((el: HTMLElement) => {
+        el.style.width = `${wRef * 0.78}px`
+        el.style.height = `${hRef * 0.78}px`
+      })
       requestDraw()
     }
 
@@ -158,8 +176,8 @@ export default function SiteMotion() {
       intro.style.opacity = String(fade)
       intro.style.transform = `translateY(${-80 * (1 - fade)}px)`
       intro.inert = fade < 0.08
-      $(".scroll-cue").style.opacity = String(fade)
-      $(".scroll-cue").style.color = intro.style.color
+      scrollCue.style.opacity = String(fade)
+      scrollCue.style.color = intro.style.color
       const salaryFade = phase(travel, 390, 480)
       salary.style.opacity = String(salaryFade)
       salary.style.transform = `translateY(${d.mobile ? 24 * (1 - salaryFade) : -50 + 24 * (1 - salaryFade)}%)`
@@ -190,40 +208,53 @@ export default function SiteMotion() {
       const index = (((Math.round(-rotation / (360 / themes.length)) % themes.length) + themes.length) % themes.length)
       if (lastMaterial !== themes[index][1]) {
         lastMaterial = themes[index][1]
-        $("#card-material").textContent = lastMaterial
+        cardMaterial.textContent = lastMaterial
       }
       if (!reduced.matches) {
-        $(".wallet-phone").style.transform = `translate(-50%,-50%) rotateY(${mix(-20, 20, p)}deg) rotateX(${mix(10, -5, p)}deg) scale(${d.mobile ? 0.92 : 1})`
+        walletPhone.style.transform = `translate(-50%,-50%) rotateY(${mix(-20, 20, p)}deg) rotateX(${mix(10, -5, p)}deg) scale(${d.mobile ? 0.92 : 1})`
       }
     }
 
     function secondaryFrame(y: number) {
       const d = dimensions
+      // Skip a section's parallax math unless it is within a viewport of the
+      // screen; far sections stay pinned at their clamped extreme anyway.
+      const near = (r: any) => y + d.height * 1.5 > r.top && y - d.height < r.top + r.height
       if (!reduced.matches) {
-        const socialP = clamp((y - d.social.top + d.height) / (d.social.height + d.height))
-        const distance = socialP * (d.mobile ? 410 : 580) * 3
-        const wrapped = d.awardsSet ? distance % d.awardsSet : distance
-        awards.style.transform = `translateX(${-wrapped}px)`
-        const savingsP = clamp((y - d.savings.top + d.height) / (d.savings.height + d.height))
-        $(".savings-backgrounds").style.transform = `translateY(${mix(-25, 25, savingsP)}px)`
-        const airP = phase(clamp((y - d.air.top + d.height) / d.height), 0.08, 0.85)
-        $(".air-demo").style.setProperty("--reveal", String(airP))
-        $(".air-orb").style.transform = `translateY(${mix(40, -10, airP)}px) rotate(${mix(-25, 12, airP)}deg)`
-        $(".user-bubble").style.transform = `translateY(${35 * (1 - airP)}px)`
-        $(".assistant-bubble").style.transform = `translateY(${65 * (1 - airP)}px)`
-        const securityP = clamp((y - d.security.top + d.height) / (d.security.height + d.height))
-        $(".security-art").style.transform = `rotateY(${mix(-16, 20, securityP)}deg)`
-        $(".orbit-one").style.transform = `translate(-50%,-50%) rotateX(65deg) rotateY(${mix(-20, 80, securityP)}deg)`
-        const investP = clamp((y - d.invest.top + d.height) / (d.invest.height + d.height))
-        document.querySelectorAll(".stock").forEach((stock: any, i: number) => {
-          const direction = i % 2 ? 1 : -1
-          stock.style.transform = `translateY(${mix(45, -45, investP) * direction}px) rotate(${mix(-10, 10, investP) * direction}deg)`
-        })
+        if (near(d.social)) {
+          const socialP = clamp((y - d.social.top + d.height) / (d.social.height + d.height))
+          const distance = socialP * (d.mobile ? 410 : 580) * 3
+          const wrapped = d.awardsSet ? distance % d.awardsSet : distance
+          awards.style.transform = `translateX(${-wrapped}px)`
+        }
+        if (near(d.savings)) {
+          const savingsP = clamp((y - d.savings.top + d.height) / (d.savings.height + d.height))
+          savingsBg.style.transform = `translateY(${mix(-25, 25, savingsP)}px)`
+        }
+        if (near(d.air)) {
+          const airP = phase(clamp((y - d.air.top + d.height) / d.height), 0.08, 0.85)
+          airDemo.style.setProperty("--reveal", String(airP))
+          airOrb.style.transform = `translateY(${mix(40, -10, airP)}px) rotate(${mix(-25, 12, airP)}deg)`
+          userBubble.style.transform = `translateY(${35 * (1 - airP)}px)`
+          assistantBubble.style.transform = `translateY(${65 * (1 - airP)}px)`
+        }
+        if (near(d.security)) {
+          const securityP = clamp((y - d.security.top + d.height) / (d.security.height + d.height))
+          securityArt.style.transform = `rotateY(${mix(-16, 20, securityP)}deg)`
+          orbitOne.style.transform = `translate(-50%,-50%) rotateX(65deg) rotateY(${mix(-20, 80, securityP)}deg)`
+        }
+        if (near(d.invest)) {
+          const investP = clamp((y - d.invest.top + d.height) / (d.invest.height + d.height))
+          stocks.forEach((stock, i) => {
+            const direction = i % 2 ? 1 : -1
+            stock.style.transform = `translateY(${mix(45, -45, investP) * direction}px) rotate(${mix(-10, 10, investP) * direction}deg)`
+          })
+        }
       }
       const point = y + 44
       const inRange = (rect: any) => point >= rect.top && point < rect.top + rect.height
       const heroDark = point < d.hero.top + d.hero.height && (reduced.matches ? point < 620 : hero.dataset.fullscreen === "true")
-      $("header").classList.toggle("on-light", !(heroDark || inRange(d.savings) || inRange(d.cards) || inRange(d.security) || inRange(d.closing)))
+      header.classList.toggle("on-light", !(heroDark || inRange(d.savings) || inRange(d.cards) || inRange(d.security) || inRange(d.closing)))
     }
 
     function draw() {
