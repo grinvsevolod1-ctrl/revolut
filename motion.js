@@ -27,7 +27,10 @@
   });
   const paymentCards = [...ring.children];
   // Duplicate only presentation, leaving the original award list accessible.
-  [...awards.children].forEach(item => {
+  // The clone set enables a seamless wrap: the track is translated modulo the
+  // width of one set, so the loop never runs out of content or snaps.
+  const awardsOriginals = [...awards.children];
+  awardsOriginals.forEach(item => {
     const copy = item.cloneNode(true);
     copy.dataset.clone = '';
     copy.setAttribute('aria-hidden', 'true');
@@ -47,6 +50,11 @@
       air: bounds($('#air')), security: bounds($('#security')), invest: bounds($('#invest')),
       closing: bounds($('.closing')),
     };
+    // Width of one full award set (first clone's left edge minus first original's).
+    // Wrapping the track translate by this value yields a seamless infinite loop.
+    dimensions.awardsSet = awardsOriginals.length
+      ? awards.children[awardsOriginals.length].offsetLeft - awards.children[0].offsetLeft
+      : 0;
     const radius = dimensions.mobile ? Math.min(240, innerWidth * .53) : Math.min(405, innerWidth * .27);
     paymentCards.forEach((card, index) => {
       card.style.transform = `rotateY(${index * 360 / themes.length}deg) translateZ(${radius}px) rotateZ(-8deg)`;
@@ -132,7 +140,9 @@
     const d = dimensions;
     if (!reduced.matches) {
       const socialP = clamp((y - d.social.top + d.height) / (d.social.height + d.height));
-      awards.style.transform = `translateX(${-socialP * (d.mobile ? 410 : 580)}px)`;
+      const distance = socialP * (d.mobile ? 410 : 580) * 3;
+      const wrapped = d.awardsSet ? distance % d.awardsSet : distance;
+      awards.style.transform = `translateX(${-wrapped}px)`;
       const savingsP = clamp((y - d.savings.top + d.height) / (d.savings.height + d.height));
       $('.savings-backgrounds').style.transform = `translateY(${mix(-25,25,savingsP)}px)`;
       const airP = phase(clamp((y - d.air.top + d.height) / d.height), .08, .85);
