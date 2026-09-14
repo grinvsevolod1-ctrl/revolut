@@ -96,6 +96,9 @@ export default function SiteMotion() {
     })
 
     let dimensions: any, frame = 0, manualRotation = 0
+    // Rendered values ease toward their targets each frame so scroll-driven
+    // motion is fluid instead of snapping to the raw scroll position.
+    let renderedY = scrollY, renderedRotation = 0
     let dragStart: any = null
     let lastMaterial = ""
     const bounds = (el: any) => ({ top: el.getBoundingClientRect().top + scrollY, height: el.offsetHeight })
@@ -177,7 +180,7 @@ export default function SiteMotion() {
       const d = dimensions
       const p = clamp((y - d.cards.top) / Math.max(1, d.cards.height - d.cardHeight))
       cardStory.dataset.progress = p.toFixed(3)
-      const rotation = (reduced.matches ? -12 : -p * 440 - 12) + manualRotation
+      const rotation = (reduced.matches ? -12 : -p * 440 - 12) + renderedRotation
       const scale = d.mobile ? clamp((d.cardHeight - 360) / 540, 0.64, 1) : clamp((d.cardHeight - 410) / 470, 0.55, 1)
       ring.style.transform = `scale3d(${scale},${scale},${scale}) rotateX(${reduced.matches ? -12 : mix(-15, 12, p)}deg) rotateZ(${reduced.matches ? -7 : mix(-9, 9, p)}deg) rotateY(${rotation}deg)`
       paymentCards.forEach((card: any, index: number) => {
@@ -217,7 +220,7 @@ export default function SiteMotion() {
           stock.style.transform = `translateY(${mix(45, -45, investP) * direction}px) rotate(${mix(-10, 10, investP) * direction}deg)`
         })
       }
-      const point = scrollY + 44
+      const point = y + 44
       const inRange = (rect: any) => point >= rect.top && point < rect.top + rect.height
       const heroDark = point < d.hero.top + d.hero.height && (reduced.matches ? point < 620 : hero.dataset.fullscreen === "true")
       $("header").classList.toggle("on-light", !(heroDark || inRange(d.savings) || inRange(d.cards) || inRange(d.security) || inRange(d.closing)))
@@ -225,10 +228,24 @@ export default function SiteMotion() {
 
     function draw() {
       frame = 0
-      const y = scrollY
-      heroFrame(y)
-      cardsFrame(y)
-      secondaryFrame(y)
+      const targetY = scrollY
+      if (reduced.matches) {
+        renderedY = targetY
+        renderedRotation = manualRotation
+      } else {
+        // Critically-damped-ish easing: rendered values chase their targets.
+        renderedY += (targetY - renderedY) * 0.14
+        renderedRotation += (manualRotation - renderedRotation) * 0.16
+        if (Math.abs(targetY - renderedY) < 0.35) renderedY = targetY
+        if (Math.abs(manualRotation - renderedRotation) < 0.02) renderedRotation = manualRotation
+      }
+      heroFrame(renderedY)
+      cardsFrame(renderedY)
+      secondaryFrame(renderedY)
+      // Keep animating until both values have settled on their targets.
+      if (renderedY !== targetY || renderedRotation !== manualRotation) {
+        frame = requestAnimationFrame(draw)
+      }
     }
     function requestDraw() {
       if (!frame) frame = requestAnimationFrame(draw)
