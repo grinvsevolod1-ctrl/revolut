@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#6ca8d6"><title>Revolut — motion study</title><link rel="preload" href="assets/AeonikPro-Medium.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="styles.css"><script src="app.js" defer></script><script src="motion.js" defer></script></head>
+<body>
+<header><nav aria-label="Main navigation"><a class="logo" href="#home">Revolut</a><div class="navigation" id="navigation"><a href="#salary">Personal</a><button data-action="business">Business</button><button data-action="kids">Kids &amp; Teens</button><a href="#about">Company</a></div><div class="account"><button data-action="login">Log in</button><button class="pill dark" data-action="signup">Sign up</button><button class="menu" aria-label="Toggle menu" aria-expanded="false" aria-controls="navigation">☰</button></div></nav></header>
+<main>
+<section class="hero-story" id="home" aria-label="Banking and beyond">
+  <div class="hero-stage">
+    <div class="hero-copy"><h1>BANKING &amp; BEYOND</h1><div class="hero-intro"><p>This is your bank, redefined. Get powerful daily banking and global freedom. Sign up for free in a tap.</p><button class="pill light" data-action="signup">Download the app</button></div></div>
+    <div class="tile-space" aria-hidden="true">
+      <div class="satellite satellite-left"><img src="assets/salary-layer.png" alt=""></div>
+      <div class="satellite satellite-right"><img src="assets/salary.png" alt=""></div>
+      <div class="account-tile">
+        <div class="tile-face tile-front"><img class="tile-sky" src="assets/hero.png" alt=""><img class="tile-person" src="assets/hero-person.png" alt=""><img class="tile-overlay" src="assets/salary-back.png" alt=""></div>
+        <div class="tile-face tile-back"><img src="assets/salary.png" alt=""></div>
+      </div>
+    </div>
+    <div class="salary-copy" id="salary"><h2>Your salary,<br>reimagined</h2><p>A little more freedom, every day. Bring your spending, saving, and everyday plans together in one place.</p><button class="pill dark" data-action="salary">Move your salary</button></div>
+    <div class="scroll-cue" aria-hidden="true"><span>Scroll to explore</span><span>↓</span></div>
+  </div>
+</section>
+<section class="social section" id="customers"><h2>Join 80+ million customers<br class="desktop-break"> worldwide and 13 million<br class="desktop-break"> in the UK</h2>
+  <div class="awards-window"><div class="awards-track">
+    <figure><img src="assets/award-downloads.png" alt="Finance app ranking" loading="lazy"><figcaption>#3 most downloaded<br>finance app</figcaption></figure>
+    <figure><img src="assets/award-trustpilot.png" alt="Trustpilot" loading="lazy"><figcaption>4.7 out of 5<br>on Trustpilot</figcaption></figure>
+    <figure><img src="assets/award-digital.png" alt="Global Finance 2025 award" loading="lazy"><figcaption>World’s Best<br>Digital Bank</figcaption></figure>
+    <figure><img src="assets/award-forbes.png" alt="Forbes award" loading="lazy"><figcaption>World’s Best<br>Banks List</figcaption></figure>
+    <figure><img src="assets/award-payments.png" alt="Payments award" loading="lazy"><figcaption>International Payments<br>Provider 2025</figcaption></figure>
+    <figure><img src="assets/award-service.png" alt="Customer satisfaction award" loading="lazy"><figcaption>Customer Satisfaction<br>Gold</figcaption></figure>
+    <figure><img src="assets/award-guardian.png" alt="Consumer Guardian 2025 award" loading="lazy"><figcaption>Consumer Guardian<br>2025</figcaption></figure>
+  </div></div>
+</section>
+<section class="adventure" id="savings" data-scene="Adventure">
+  <div class="savings-backgrounds" aria-hidden="true"><img class="savings-bg active" data-landscape="Adventure" src="assets/cards.png" alt="" loading="lazy"><img class="savings-bg" data-landscape="Wedding" src="assets/savings-wedding.png" alt="" loading="lazy"><img class="savings-bg" data-landscape="Moving" src="assets/savings-moving.png" alt="" loading="lazy"></div>
+  <div class="section-copy"><h2>Life, meets savings</h2><p>Big adventures start with small steps.<br>Make room for your next one.</p><button class="pill light" data-action="savings">Explore Savings</button></div>
+  <div class="savings-ui"><img class="active" data-savings-ui="Adventure" src="assets/savings.png" alt="Example adventure savings balance" loading="lazy"><img data-savings-ui="Wedding" src="assets/savings-wedding-ui.png" alt="Example wedding savings balance" loading="lazy"><img data-savings-ui="Moving" src="assets/savings-moving-ui.png" alt="Example moving savings balance" loading="lazy"></div>
+  <div class="choices" aria-label="Savings example"><button class="selected" aria-pressed="true" data-savings="Adventure">Adventure</button><button aria-pressed="false" data-savings="Wedding">Wedding</button><button aria-pressed="false" data-savings="Moving">Moving</button></div><p id="savings-caption" aria-live="polite">Save for your next adventure.</p>
+</section>
+<section class="card-story" id="cards" aria-label="Payment cards">
+  <div class="card-stage" data-mode="physical">
+    <div class="card-copy"><h2 id="cards-title">Elevate your spend</h2><p id="cards-description">Everyday spending. Extraordinary possibilities.<br>Find a card that feels like you.</p><button class="pill light" id="cards-cta" data-action="cards">Start earning</button></div>
+    <div class="cards-viewport" role="group" aria-label="Rotating card collection" tabindex="0"><div class="cards-ring" aria-hidden="true"></div><div class="ring-shadow" aria-hidden="true"></div></div>
+    <div class="virtual-scene" aria-hidden="true"><div class="wallet-phone"><span class="phone-island"></span><div class="wallet-heading">Wallet <span>+</span></div><div class="wallet-card wallet-one">Revolut<span>VISA</span></div><div class="wallet-card wallet-two">Revolut<span>VISA</span></div><div class="wallet-card wallet-three">Revolut<span>VISA</span></div><p>Ready when you are.</p></div><div class="virtual-float vf-one">Revolut<span>VISA</span></div><div class="virtual-float vf-two">Revolut<span>VISA</span></div></div>
+    <div class="card-controls"><div class="rotation-controls"><button class="round-button" data-turn="-1" aria-label="Rotate cards left">←</button><span id="card-material" aria-live="polite">Platinum</span><button class="round-button" data-turn="1" aria-label="Rotate cards right">→</button></div><div class="choices" aria-label="Card type"><button data-card-mode="physical" class="selected" aria-pressed="true">Physical cards</button><button data-card-mode="virtual" aria-pressed="false">Virtual cards</button></div></div>
+  </div>
+</section>
+<section class="air-section section" id="air"><div class="section-copy"><span class="eyebrow">AI BY REVOLUT</span><h2>A little help.<br>A lot of possibility.</h2><p>From your next trip to your everyday plans. A conversation is all it takes.</p><button class="pill dark" data-action="air">Meet AIR</button></div><div class="air-demo"><div class="air-orb" aria-hidden="true">✳</div><div class="chat-bubble user-bubble">How much did I spend on coffee?</div><div class="chat-bubble assistant-bubble">Let’s take a look.<div class="coffee-chart"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span>Your week, at a glance.</span></div><span class="example-label">Illustrative conversation</span></div></section>
+<section class="security-section section" id="security"><div class="security-art" aria-hidden="true"><div class="security-orbit orbit-one"></div><div class="security-orbit orbit-two"></div><div class="security-orbit orbit-three"></div><div class="security-core">R<span>✓</span></div></div><div class="section-copy"><span class="eyebrow">REVOLUT SECURE</span><h2>Confidence.<br>Built in.</h2><p>A space for your money, with control in your hands.</p><button class="pill light" data-action="security">Explore security</button></div></section>
+<section class="invest-section section" id="invest"><div class="section-copy"><h2>A world<br>of opportunity.</h2><p>Big ideas. Familiar names.<br>Explore what’s next.</p><button class="pill dark" data-action="invest">Explore investing</button><small>Illustrative preview. Capital at risk.</small></div><div class="stock-cloud" aria-hidden="true"><span class="stock stock-apple">AAPL</span><span class="stock stock-google"><b>G</b><small>Alphabet</small></span><span class="stock stock-nvidia">NVIDIA</span><span class="stock stock-amazon">amazon<span>⌣</span></span><span class="stock stock-tesla">T<span>TESLA</span></span><span class="stock stock-meta">∞<small>Meta</small></span></div></section>
+<section class="closing section"><h2>Join the 80+ million<br>using Revolut</h2><button class="pill light" data-action="signup">Get started</button></section>
+</main>
+<footer id="about"><a class="logo" href="#home">Revolut</a><div><a href="#salary">Everyday banking</a><a href="#savings">Savings</a><a href="#cards">Cards</a></div><p>Local design reconstruction. Not affiliated with Revolut. Product screens show illustrative data. No banking services are provided.</p></footer>
+<dialog id="action-dialog"><form method="dialog"><button class="close" aria-label="Close">×</button></form><h2 id="dialog-title">Local preview</h2><p>This action is ready to connect to your own application. No data is collected or sent.</p><button class="pill dark" id="dismiss">Got it</button></dialog>
+</body></html>
