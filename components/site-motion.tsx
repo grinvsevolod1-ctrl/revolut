@@ -15,7 +15,7 @@ export default function SiteMotion() {
     const { signal } = controller
     let cancelled = false
 
-    const $ = (selector: string): any => document.querySelector(selector)
+    const $ = <T extends Element = HTMLElement>(selector: string): T => document.querySelector(selector) as T
     const clamp = (value: number, low = 0, high = 1) => Math.max(low, Math.min(high, value))
     const mix = (a: number, b: number, p: number) => a + (b - a) * p
     const smooth = (p: number) => p * p * (3 - 2 * p)
@@ -264,14 +264,25 @@ export default function SiteMotion() {
         rotate(event.key === "ArrowLeft" ? -1 : 1)
       }
     }, { signal })
+    // Let vertical scrolling pass through while we capture horizontal drags,
+    // so the ring can be spun by touch without hijacking page scroll.
+    viewport.style.touchAction = "pan-y"
     viewport.addEventListener("pointerdown", (event: any) => {
       if (event.button !== 0) return
-      dragStart = { x: event.clientX, rotation: manualRotation }
+      dragStart = { x: event.clientX, y: event.clientY, rotation: manualRotation, active: false }
       viewport.setPointerCapture(event.pointerId)
     }, { signal })
     viewport.addEventListener("pointermove", (event: any) => {
       if (!dragStart) return
-      manualRotation = dragStart.rotation + (event.clientX - dragStart.x) * 0.35
+      const dx = event.clientX - dragStart.x
+      // For touch/pen, only treat it as a spin once horizontal intent is clear,
+      // so a mostly-vertical swipe still scrolls the page.
+      if (!dragStart.active && event.pointerType !== "mouse") {
+        if (Math.abs(dx) < 8 || Math.abs(dx) <= Math.abs(event.clientY - dragStart.y)) return
+        dragStart.active = true
+      }
+      if (event.cancelable) event.preventDefault()
+      manualRotation = dragStart.rotation + dx * 0.35
       requestDraw()
     }, { signal })
     const stopDrag = () => { dragStart = null }
@@ -306,8 +317,19 @@ export default function SiteMotion() {
       }, { signal }),
     )
 
+    // Debounce resize so orientation changes / window drags recompute cached
+    // geometry once things settle instead of thrashing on every resize tick.
+    let resizeTimer = 0
+    const onResize = () => {
+      clearTimeout(resizeTimer)
+      resizeTimer = window.setTimeout(() => { if (!cancelled) measure() }, 150)
+    }
+
+    // Signal that the choreography is live so CSS can reveal JS-driven content.
+    document.documentElement.classList.add("js-ready")
+
     addEventListener("scroll", requestDraw, { passive: true, signal })
-    addEventListener("resize", measure, { passive: true, signal })
+    addEventListener("resize", onResize, { passive: true, signal })
     reduced.addEventListener("change", measure, { signal })
     document.fonts.ready.then(() => { if (!cancelled) measure() })
     measure()
